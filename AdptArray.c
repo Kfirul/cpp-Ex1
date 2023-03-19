@@ -4,9 +4,6 @@
 #include "AdptArray.h"
 
 
-
-
-
 typedef struct AdptArray_
 {
 	int ArrSize;
@@ -14,7 +11,7 @@ typedef struct AdptArray_
 	DEL_FUNC delFunc;
 	COPY_FUNC copyFunc;
     PRINT_FUNC printFunc;
-}AdptArray;
+}AdptArray,*PAdptArray;
 
 PAdptArray CreateAdptArray(COPY_FUNC copyFunc_, DEL_FUNC delFunc_, PRINT_FUNC printFunc_)
 {
