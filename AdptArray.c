@@ -1,8 +1,8 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 #include "AdptArray.h"
+#include <stdlib.h>
+#include <string.h>
 
+// I used the solution of the test 2023 due a
 
 typedef struct AdptArray_
 {
@@ -11,7 +11,7 @@ typedef struct AdptArray_
 	DEL_FUNC delFunc;
 	COPY_FUNC copyFunc;
     PRINT_FUNC printFunc;
-}AdptArray,*PAdptArray;
+}AdptArray;
 
 PAdptArray CreateAdptArray(COPY_FUNC copyFunc_, DEL_FUNC delFunc_, PRINT_FUNC printFunc_)
 {
@@ -25,7 +25,6 @@ PAdptArray CreateAdptArray(COPY_FUNC copyFunc_, DEL_FUNC delFunc_, PRINT_FUNC pr
     pArr->printFunc = printFunc_;
 	return pArr;
 }
-
 
 Result SetAdptArrayAt(PAdptArray pArr, int idx, PElement pNewElem)
 {
@@ -48,54 +47,38 @@ Result SetAdptArrayAt(PAdptArray pArr, int idx, PElement pNewElem)
 	pArr->ArrSize = (idx >= pArr->ArrSize) ? (idx + 1) : pArr->ArrSize;
 	return SUCCESS;
 }
-
-
 void DeleteAdptArray(PAdptArray pArr)
 {
 	int i;
 	if (pArr == NULL)
-		return;	
+		return;
 	for(i = 0; i < pArr->ArrSize; ++i)
 	{
-		if ((pArr->pElemArr)[i] != NULL)
-			pArr->delFunc((pArr->pElemArr)[i]);
+		if ((pArr->pElemArr)[i] == NULL) continue;
+		pArr->delFunc((pArr->pElemArr)[i]);
 	}
-	
 	free(pArr->pElemArr);
 	free(pArr);
 }
 
-void PrintDB(PAdptArray pArr)
+void PrintDB(PAdptArray pArr) 
 {
-    if (!pArr){
-        printf("Error\n");
+	int i;
+	if (pArr == NULL)
 		return;
+	for(i = 0; i < pArr->ArrSize; ++i)
+	{
+		if ((pArr->pElemArr)[i] == NULL) continue;
+		pArr->printFunc((pArr->pElemArr)[i]);
 	}
-    int i=0;
-    while(i<pArr->ArrSize){
-        if (pArr -> pElemArr[i] != NULL){
-			pArr -> printFunc(pArr ->pElemArr[i]);
-		}
-        i++;
-    }
-	
 }
 
-PElement GetAdptArrayAt(PAdptArray pArr, int index){
-	if(!pArr->pElemArr[index]){
-        printf("Error");
-            return NULL;
+PElement GetAdptArrayAt(PAdptArray pArr, int index) {
+	return ((pArr->pElemArr)[index] == NULL) ? NULL : pArr->copyFunc((pArr->pElemArr)[index]);
+}
+int GetAdptArraySize(PAdptArray pArr) {
+	if (pArr == NULL) {
+		return -1;
 	}
-    return pArr->copyFunc(pArr->pElemArr[index]);        
-
+	return pArr->ArrSize;
 }
-
-int GetAdptArraySize(PAdptArray pArr){
-    if(!pArr){
-        printf("Error\n");
-        return -1;
-    }
-    return pArr->ArrSize;
-}
-
-
